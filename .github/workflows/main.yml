@@ -1,42 +1,33 @@
-from flask import Flask
-from flask_admin import Admin
-from flask_admin.contrib.sqla import ModelView
-from models import db, User, Product
+name: Flask App CI
 
-app = Flask(__name__)
-app.config['SECRET_KEY'] = 'supersecretkey'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
 
-db.init_app(app)
+jobs:
+  test:
+    runs-on: ubuntu-latest
 
-# Khởi tạo giao diện Flask-Admin
-admin = Admin(app, name='Quản trị hệ thống', template_mode='bootstrap4')
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
 
-# Tùy chỉnh giao diện User
-class UserAdmin(ModelView):
-    column_exclude_list = ['is_admin']
-    form_excluded_columns = ['is_admin']
-    can_create = True
-    can_edit = True
-    can_delete = True
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
 
-# Tùy chỉnh Product (tùy chọn thêm)
-class ProductAdmin(ModelView):
-    column_list = ['id', 'name', 'price', 'stock']
-    column_searchable_list = ['name']
-    column_filters = ['price', 'stock']
-    can_create = True
-    can_edit = True
-    can_delete = True
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
 
-# Thêm các bảng vào Admin
-admin.add_view(UserAdmin(User, db.session))
-admin.add_view(ProductAdmin(Product, db.session))
+    - name: Initialize test database
+      run: |
+        python -c "from app import app, db; with app.app_context(): db.create_all()"
 
-# Tạo DB nếu chưa có
-with app.app_context():
-    db.create_all()
-
-if __name__ == '__main__':
-    app.run(debug=True)
+    - name: Run unit tests
+      run: |
+        python -m unittest discover
