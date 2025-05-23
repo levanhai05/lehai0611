@@ -24,12 +24,12 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          pip install -r flask_admin_app/requirements.txt
 
       - name: Initialize test database
         run: |
-          python -c "from app import app, db; with app.app_context(): db.create_all()"
+          python -c "from flask_admin_app.app import app, db; with app.app_context(): db.create_all()"
 
       - name: Run unit tests
         run: |
-          python -m unittest discover
+          python -m unittest discover flask_admin_app/tests
