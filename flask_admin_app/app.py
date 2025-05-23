@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
-from models import db, User, Product
+from flask_admin_app.models import db, User, Product
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'supersecretkey'
