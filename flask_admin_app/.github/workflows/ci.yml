@@ -28,7 +28,11 @@ jobs:
 
       - name: Initialize test database
         run: |
-          python -c "from flask_admin_app.app import app, db; with app.app_context(): db.create_all()"
+          python - <<EOF
+          from flask_admin_app.app import app, db
+          with app.app_context():
+              db.create_all()
+          EOF
 
       - name: Run unit tests
         run: |
