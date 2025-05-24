@@ -13,7 +13,6 @@ db.init_app(app)
 # Khởi tạo giao diện Flask-Admin
 admin = Admin(app, name='Quản trị hệ thống', template_mode='bootstrap4')
 
-# Tùy chỉnh giao diện User
 class UserAdmin(ModelView):
     column_exclude_list = ['is_admin']
     form_excluded_columns = ['is_admin']
