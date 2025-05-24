@@ -10,7 +10,6 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(app)
 
-# Khởi tạo giao diện Flask-Admin
 admin = Admin(app, name='Quản trị hệ thống', template_mode='bootstrap4')
 
 class UserAdmin(ModelView):
@@ -20,6 +19,7 @@ class UserAdmin(ModelView):
     can_edit = True
     can_delete = True
 
+# Tùy chỉnh Product (tùy chọn thêm)
 class ProductAdmin(ModelView):
     column_list = ['id', 'name', 'price', 'stock']
     column_searchable_list = ['name']
