@@ -10,7 +10,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(app)
 
-
+# Khởi tạo giao diện Flask-Admin
 admin = Admin(app, name='Quản trị hệ thống', template_mode='bootstrap4')
 
 class UserAdmin(ModelView):
@@ -28,9 +28,11 @@ class ProductAdmin(ModelView):
     can_edit = True
     can_delete = True
 
+# Thêm các bảng vào Admin
 admin.add_view(UserAdmin(User, db.session))
 admin.add_view(ProductAdmin(Product, db.session))
 
+# Tạo DB nếu chưa có
 with app.app_context():
     db.create_all()
 
